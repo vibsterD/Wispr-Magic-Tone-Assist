@@ -14,15 +14,22 @@ import co.thingthing.fleksy.core.keyboard.KeyboardConfiguration
 import co.thingthing.fleksy.core.keyboard.KeyboardService
 import co.thingthing.fleksy.core.keyboard.PanelHelper
 import co.thingthing.fleksy.core.personalisation.Button
+import com.example.wisprmagic.data.ToneAssistRequest
+import com.example.wisprmagic.databinding.ToneAssistBinding
+import com.example.wisprmagic.network.ToneAssistApi
 import com.example.wisprmagic.ui.theme.WisprMagicTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class WisprKeyboardService: KeyboardService() {
+    private lateinit var toneAssistView: ToneAssistBinding
 
     override fun createConfiguration(): KeyboardConfiguration {
         return KeyboardConfiguration(
             license = KeyboardConfiguration.LicenseConfiguration(
-                licenseKey = "<your-license-key>",
-                licenseSecret = "<your-license-secret>"
+                licenseKey = BuildConfig.FLEKSY_LICENSE_KEY,
+                licenseSecret = BuildConfig.FLEKSY_LICENSE_SECRET
             ),
             customizationBundle = KeyboardConfiguration.CustomizationBundleConfiguration(
                 /**
@@ -66,7 +73,7 @@ class WisprKeyboardService: KeyboardService() {
                      * equal to or less than the dimensions of the keycap.
                      */
                     scaleMode = Button.ScaleMode.CENTER_INSIDE,
-                ) {
+                ) { it ->
                     /**
                      * On click action for the custom button.
                      */
@@ -79,6 +86,30 @@ class WisprKeyboardService: KeyboardService() {
                         ExtractedTextRequest(), 0
                     ).text.toString())
                     Log.d("WisprKeyboardService", "Selected Text: " + currentInputConnection.getSelectedText(0))
+
+                    toneAssistView = ToneAssistBinding.inflate(this.layoutInflater)
+                    toneAssistView.textView.text = currentInputConnection.getExtractedText(
+                        ExtractedTextRequest(), 0
+                    ).text.toString()
+
+
+                    toneAssistView.socialButton.setOnClickListener {
+                        Log.d("WisprKeyboardService", "Social Button Clicked")
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val response =
+                                ToneAssistApi.retrofitService.getToneAssist(ToneAssistRequest(toneAssistView.textView.text.toString()))
+                            Log.d("WisprKeyboardService", "Response: $response")
+                            toneAssistView.textView.text = response.newText
+                        }
+                    }
+
+                    toneAssistView.professionalButton.setOnClickListener {
+                        Log.d("WisprKeyboardService", "Professional Button Clicked")
+                        PanelHelper.hideFullView()
+                    }
+
+                    PanelHelper.showFullView(toneAssistView.root)
 
                 })
             )

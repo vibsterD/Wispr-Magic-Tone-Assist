@@ -1,10 +1,14 @@
-import com.android.build.api.dsl.AaptOptions
 
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+
+    // ksp
+    id("com.google.devtools.ksp") version "1.9.21-1.0.15"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.23"
+
 }
 
 android {
@@ -33,6 +37,12 @@ android {
             )
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -53,7 +63,12 @@ android {
     }
 
     // Fleksy
-    aaptOptions {
+//    aaptOptions {
+//        noCompress += ".json"
+//        noCompress += ".wav"
+//    }
+
+    androidResources {
         noCompress += ".json"
         noCompress += ".wav"
     }
@@ -80,6 +95,18 @@ dependencies {
 
     // Keyboard Dependencies
     implementation("co.thingthing.fleksycore:fleksycore-release:4.10.0")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // Retrofit with Kotlin serialization Converter
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
+    // Kotlin serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+
 
 }
 
