@@ -29,12 +29,36 @@ def groq_it_up(item: Item):
 
 	SYSTEM_PROMPT = """
 	You are a writing assistant. 
-	Rewrite the user message in #social context and return in ONLY JSON format `{new_tone_message: <>}`. For example: "The run was amazing today! 🥰🥰 #runday #sunyy" 
+	All output must be in valid JSON. Don’t add explanation beyond the JSON.
+	Rewrite the user message in #social context and return in ONLY JSON format 
+	`{social_tone: <>, polite_tone: <>, professional_tone: <>, emojify_tone: <>}`. 
+	Don't change the user message. Minor edits to the user message are allowed but it should not change the meaning.
+	For example: "The run was amazing today! 🥰🥰 #runday #sunyy" 
+
+	Example:
+
+		User Message:
+		"Could you please provide me with the report by tomorrow?"
+
+		Outputs:
+
+		Social Tone:
+		"Hey there! Can you hook me up with the report by tomorrow? 📊😊"
+
+		Polite Tone:
+		"Would it be possible for you to kindly furnish me with the report by tomorrow?"
+
+		Professional Tone:
+		"Could you kindly ensure the report is provided by tomorrow?"
+
+		Emojify Tone:
+		"Could you please 🙏🌟 provide me with the report 📊 by tomorrow? 😊😊"
+
 	"""
 
 	try: 
 		completion = client.chat.completions.create(
-			model="llama3-8b-8192",
+			model="llama3-70b-8192",
 			messages=[
 				{
 					"role": "system",
