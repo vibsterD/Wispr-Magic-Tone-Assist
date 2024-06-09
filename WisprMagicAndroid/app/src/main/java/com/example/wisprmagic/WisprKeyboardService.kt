@@ -19,10 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.marginRight
+import androidx.lifecycle.viewmodel.CreationExtras
 import co.thingthing.fleksy.core.keyboard.KeyboardConfiguration
 import co.thingthing.fleksy.core.keyboard.KeyboardService
+import co.thingthing.fleksy.core.keyboard.KeyboardSize
 import co.thingthing.fleksy.core.keyboard.PanelHelper
 import co.thingthing.fleksy.core.personalisation.Button
+import com.example.wisprmagic.data.KeyboardConfigRecord
 import com.example.wisprmagic.data.ToneAssistRequest
 import com.example.wisprmagic.data.ToneAssistResponse
 import com.example.wisprmagic.databinding.ToneAssistBinding
@@ -31,20 +34,34 @@ import com.example.wisprmagic.ui.theme.WisprMagicTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class WisprKeyboardService: KeyboardService() {
     private lateinit var toneAssistView: ToneAssistBinding
     private lateinit var toneAssistResponse: ToneAssistResponse
     private var enableWisprMagic = true
+    private lateinit var keyboardConfigRecord: KeyboardConfigRecord
 
     @SuppressLint("SetTextI18n")
     override fun createConfiguration(): KeyboardConfiguration {
+        val wisprApplication = application as WisprKeyboardApplication
+
+        keyboardConfigRecord = runBlocking { wisprApplication.container.keyboardConfigRecordRepository.getKeyboardConfigRecord()!! }
+
         return KeyboardConfiguration(
             license = KeyboardConfiguration.LicenseConfiguration(
                 licenseKey = BuildConfig.FLEKSY_LICENSE_KEY,
                 licenseSecret = BuildConfig.FLEKSY_LICENSE_SECRET
             ),
-            customizationBundle = if (enableWisprMagic) getWisprMagicButtonCustomizationBundleConfig() else KeyboardConfiguration.CustomizationBundleConfiguration()
+            customizationBundle = if (keyboardConfigRecord.enableWisprMagic) getWisprMagicButtonCustomizationBundleConfig() else KeyboardConfiguration.CustomizationBundleConfiguration(),
+            typing = KeyboardConfiguration.TypingConfiguration(
+                autoCorrect = keyboardConfigRecord.enableAutoCorrect,
+                swipeTyping = keyboardConfigRecord.enableSwipeType,
+                autoCapsBox = keyboardConfigRecord.enableAutoCapitalize
+            ),
+            style = KeyboardConfiguration.StyleConfiguration(
+                keyboardSize = KeyboardSize.MEDIUM_BIG
+            ),
         )
     }
 

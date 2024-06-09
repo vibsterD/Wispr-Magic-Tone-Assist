@@ -8,7 +8,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [KeyboardConfigRecord::class], version = 1, exportSchema = false)
+@Database(entities = [KeyboardConfigRecord::class], version = 2, exportSchema = false)
 abstract class KeyboardConfigRecordDatabase: RoomDatabase() {
     abstract fun keyboardConfigRecordDao(): KeyboardConfigRecordDAO
 

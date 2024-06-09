@@ -1,5 +1,6 @@
 package com.example.wisprmagic.ui.screens
 
+import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,8 +22,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.wisprmagic.WisprKeyboardService
 import com.example.wisprmagic.data.KeyboardConfigRecord
 import com.example.wisprmagic.ui.AppViewModelProvider
 import com.example.wisprmagic.ui.theme.Smoke
@@ -41,10 +44,10 @@ fun SettingScreen() {
     val settingsData = listOf<SettingData>(
         SettingData("Wispr Magic", {it.enableWisprMagic}, {config, enabled -> config.copy(enableWisprMagic = enabled)}),
         SettingData("Auto Correct", {it.enableAutoCorrect}, {config, enabled -> config.copy(enableAutoCorrect = enabled)}),
-//        SettingData("Auto Capitalize"){it.enableAutoCapitalize},
+        SettingData("Auto Capitalize", {it.enableAutoCapitalize}, {config, enabled -> config.copy(enableAutoCapitalize = enabled)}),
         SettingData("Swipe Type", {it.enableSwipeType}, {config, enabled -> config.copy(enableSwipeType = enabled)})
     )
-
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -88,7 +91,13 @@ fun SettingScreen() {
                 Text(text = "Cancel")
             }
             Button(
-                onClick = { settingViewModel.commitKeyboardConfigRecord() },
+                onClick = {
+                    settingViewModel.commitKeyboardConfigRecord()
+                    val intent = Intent(context, WisprKeyboardService::class.java).apply {
+                        action = WisprKeyboardService.ACTION_RELOAD_CONFIGURATION
+                    }
+                    context.startService(intent)
+                          },
                 enabled = settingsUiState is SettingsUiState.Modified,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Twilight,

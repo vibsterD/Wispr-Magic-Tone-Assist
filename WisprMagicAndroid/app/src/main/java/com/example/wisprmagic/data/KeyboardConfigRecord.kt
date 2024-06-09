@@ -10,4 +10,5 @@ data class KeyboardConfigRecord(
     val enableAutoCorrect: Boolean = true,
     val enableSwipeType: Boolean = true,
     val enableWisprMagic: Boolean = true,
+    val enableAutoCapitalize: Boolean = true,
 )

@@ -67,8 +67,6 @@ fun WisprKeyboardSettingsApp(modifier: Modifier) {
         contentColor = MaterialTheme.colorScheme.primary
 
     ){innerPadding ->
-        val context = LocalContext.current
-
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -77,18 +75,8 @@ fun WisprKeyboardSettingsApp(modifier: Modifier) {
         ) {
             Text(
                 text = "Wispr Keyboard Settings",
-//                    style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.headlineSmall
             )
-
-            Button(onClick = {
-                val intent = Intent(context, WisprKeyboardService::class.java).apply {
-                    action = WisprKeyboardService.ACTION_RELOAD_CONFIGURATION
-                }
-                context.startService(intent)
-            }) {
-                Log.d("WisprKeyboardSettingsApp", "Reload Config!")
-                Text(text = "Reload Config!")
-            }
 
             SettingScreen()
 
@@ -103,7 +91,12 @@ fun WisprKeyboardSettingsApp(modifier: Modifier) {
 @Composable
 fun WisprKeyboardSettingsAppPreview() {
     WisprMagicTheme {
-        WisprKeyboardSettingsApp(Modifier.fillMaxSize())
+//        WisprKeyboardSettingsApp(Modifier.fillMaxSize())
+        Text(
+            text = "Wispr Keyboard Settings",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.fillMaxSize()
+        )
     }
 
 }
