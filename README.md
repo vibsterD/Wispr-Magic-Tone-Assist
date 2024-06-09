@@ -1,5 +1,7 @@
 # Wispr-SWE-Challenge
 
+Watch the demo video [here](https://drive.google.com/file/d/1qQRD5hvBx37KLU-kBxUFaWA5hiZK8eXt/view?usp=sharing)
+
 ## How to build locally
 
 - Create a secrets.properties file in WisprMagicAndroid/app/ dir with your FLEKSY_LICENSE_KEY, FLEKSY_LICENSE_SECRET, and AUTH_TOKEN for your modal enpoint bearer token
