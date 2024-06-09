@@ -11,10 +11,8 @@ import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
 
-//curl -X POST -H 'Content-Type: application/json' --data-binary '{"text": "I love to run!"}' https://vibsterd--groq-app-groq-it-up-dev.modal.run/
 
-
-private const val BASE_URL = "https://vibsterd--groq-app-groq-it-up-dev.modal.run/"
+private const val BASE_URL = "https://vibsterd--groq-app-groq-it-up.modal.run/"
 
 private val retrofit = Retrofit.Builder()
     .addConverterFactory(Json{ ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType()))

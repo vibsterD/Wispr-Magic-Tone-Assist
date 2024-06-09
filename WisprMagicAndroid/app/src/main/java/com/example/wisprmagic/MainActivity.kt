@@ -42,22 +42,12 @@ class MainActivity : ComponentActivity() {
                             )
                         )
                     ,
-//                    color = MaterialTheme.colorScheme.background
                 ) {
-//                    Greeting("Android")
                     WisprKeyboardSettingsApp(Modifier.fillMaxSize())
                 }
             }
         }
     }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
 }
 
 @Preview(showBackground = true)
@@ -84,7 +74,6 @@ fun GreetingPreview() {
             ,
 //                    color = MaterialTheme.colorScheme.background
         ) {
-//            Greeting("Android")
             WisprKeyboardSettingsApp(Modifier.fillMaxSize())
         }
     }
