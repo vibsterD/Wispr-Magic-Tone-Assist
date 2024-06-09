@@ -6,22 +6,34 @@ from pydantic import BaseModel
 import modal
 import os
 
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Depends, HTTPException, status, Request
+
 groq_image = (
 	Image.debian_slim(python_version="3.10")
 	.pip_install("groq")
 )
 
 app = App(name="groq_app", image=groq_image)
+auth_scheme = HTTPBearer()
+
 
 class Item(BaseModel):
 	text: str
 
 
-@app.function(secrets=[modal.Secret.from_name("groq-api-key")])
+@app.function(secrets=[modal.Secret.from_name("groq-api-key"), modal.Secret.from_name("auth-token-groq-api")])
 @web_endpoint(method="POST")
-def groq_it_up(item: Item):
+def groq_it_up(item: Item, token: HTTPAuthorizationCredentials = Depends(auth_scheme)):
+	if token.credentials != os.environ.get("AUTH_TOKEN"):
+		raise HTTPException(
+			status_code=status.HTTP_401_UNAUTHORIZED,
+			detail="Invalid API Key",
+			headers={"WWW-Authenticate": "Bearer"},
+		)
+
+
 	from groq import Groq
-	# test_groq(item.text)
 
 	client = Groq(
 		api_key=os.environ.get("GROQ_API_KEY")

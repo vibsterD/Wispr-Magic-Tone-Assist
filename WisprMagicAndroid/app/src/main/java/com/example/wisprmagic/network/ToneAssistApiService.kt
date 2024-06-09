@@ -1,5 +1,6 @@
 package com.example.wisprmagic.network
 
+import com.example.wisprmagic.BuildConfig
 import com.example.wisprmagic.data.ToneAssistRequest
 import com.example.wisprmagic.data.ToneAssistResponse
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -7,6 +8,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 
 //curl -X POST -H 'Content-Type: application/json' --data-binary '{"text": "I love to run!"}' https://vibsterd--groq-app-groq-it-up-dev.modal.run/
@@ -24,7 +26,9 @@ interface ToneAssistApiService {
     @POST("/")
     suspend fun getToneAssist(
         @Body
-        request: ToneAssistRequest
+        request: ToneAssistRequest,
+        @Header("Authorization")
+        auth: String = "Bearer " + BuildConfig.AUTH_TOKEN
     ): ToneAssistResponse
 }
 
