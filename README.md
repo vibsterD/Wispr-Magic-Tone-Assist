@@ -1,6 +1,8 @@
-# Wispr-SWE-Challenge
+# Wispr-Magic-Tone-Assist
 
 Watch the demo video [here](https://drive.google.com/file/d/1qQRD5hvBx37KLU-kBxUFaWA5hiZK8eXt/view?usp=sharing)
+
+LLM powered tone assist rewriting integrated right into your keyboard! 
 
 ## How to build locally
 
@@ -26,3 +28,5 @@ Watch the demo video [here](https://drive.google.com/file/d/1qQRD5hvBx37KLU-kBxU
 - [x] Set up a backend to handle the text rephrasing
 - [x] add auth to the api
 - [ ] voice notes feature (transcribing + llm)
+
+This is a project I developed for the WisprAI code challenge. 
